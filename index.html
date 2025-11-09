@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Growth Plan</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Theme color for address bar -->
+  <meta name="theme-color" content="#00d8ff"/>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📈 Growth Plan</h1>
+      <div class="timer-container">
+        <div id="nextEventTimer" class="timer">00:00:00</div>
+        <div id="currentTime" class="current-time">00:00</div>
+      </div>
+    </header>
+
+    <main id="planContainer">Загрузка плана...</main>
+  </div>
+
+  <!-- App scripts -->
+  <script src="app.js"></script>
+
+  <!-- Service worker registration (PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker зарегистрирован'))
+        .catch(err => console.warn('Ошибка регистрации SW:', err));
+    }
+  </script>
+</body>
+</html>

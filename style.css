@@ -1,0 +1,112 @@
+/* style.css - современный dark дизайн */
+:root{
+  --bg: #0f0f0f;
+  --card: #1f2937;
+  --muted: #6b7280;
+  --accent: #00d8ff;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --text: #e5e7eb;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+/* Header / Timer */
+header { text-align:center; margin-bottom:20px; }
+h1 {
+  font-size: 2rem;
+  margin: 0 0 12px 0;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0,216,255,0.12);
+}
+
+.timer-container {
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.timer, .current-time {
+  background: var(--card);
+  color: var(--text);
+  padding: 10px 18px;
+  border-radius: 14px;
+  min-width: 110px;
+  text-align:center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+  transition: background .25s ease, transform .12s ease;
+  cursor: default;
+}
+.timer:hover, .current-time:hover { background: var(--accent); color: #071018; transform: translateY(-2px); }
+
+/* Tips */
+.tips {
+  margin: 20px 0 16px 0;
+  padding: 14px;
+  background: var(--card);
+  border-radius: 14px;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height:1.45;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  transition: transform .18s ease, background .18s ease, opacity .18s ease;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+
+.card:hover { transform: translateY(-4px); background:#2a2f3a; }
+
+.card .left {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  flex:1;
+  min-width:0;
+}
+
+.card .time { font-weight:600; color:#dbeafe; font-size:0.95rem; }
+.card .activity { font-size:0.95rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.card.upcoming { border-left:5px solid var(--accent); }
+.card.past { border-left:5px solid var(--muted); opacity:.55; }
+
+/* small label for long activity wrapped */
+.activity-wrap { max-width:60%; }
+
+/* responsive adjustments */
+@media (max-width:700px){
+  .container{ padding:12px }
+  h1{ font-size:1.6rem }
+  .timer, .current-time{ min-width:90px; padding:8px 12px }
+  .card{ padding:12px; flex-direction:column; align-items:flex-start }
+  .activity-wrap{ max-width:100% }
+}
