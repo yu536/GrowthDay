@@ -32,24 +32,31 @@ self.addEventListener('activate', (event) => {
   })());
 });
 
-// Fetch handler
+// Fetch handler with navigation preload support
 self.addEventListener('fetch', (event) => {
   const req = event.request;
 
   if (req.method !== 'GET') return;
 
   event.respondWith((async () => {
-    // Сначала пробуем из кэша
-    const cached = await caches.match(req);
-    if (cached) return cached;
-
     try {
+      // Сначала пробуем navigation preload, если есть
+      const preloadResp = await event.preloadResponse;
+      if (preloadResp) return preloadResp;
+
+      // Потом проверяем кэш
+      const cached = await caches.match(req);
+      if (cached) return cached;
+
+      // И сеть
       const networkResp = await fetch(req);
+
       // Кэшируем один раз безопасно
       if (req.url.startsWith(self.location.origin)) {
         const cache = await caches.open(CACHE_NAME);
         await cache.put(req, networkResp.clone());
       }
+
       return networkResp;
     } catch (err) {
       // Offline fallback

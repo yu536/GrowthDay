@@ -20,6 +20,7 @@ body {
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden; /* запрет горизонтального скролла */
 }
 
 .container {
@@ -93,6 +94,8 @@ h1 {
   box-shadow: 0 8px 24px rgba(2,6,23,0.6);
   cursor: pointer;
   backdrop-filter: blur(10px) saturate(120%);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(2,6,23,0.75); }
@@ -106,18 +109,10 @@ h1 {
 }
 
 .card .time { font-weight:600; color:#dbeafe; font-size:0.95rem; }
-.card .activity { font-size:0.98rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.card .activity { font-size:0.98rem; color:var(--text); word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
 
 .card.upcoming { border-left:4px solid rgba(96,165,250,0.9); }
 .card.past { border-left:4px solid rgba(148,163,184,0.18); opacity:.65; }
-
-/* responsive adjustments */
-@media (max-width:700px){
-  .container{ padding:12px }
-  h1{ font-size:1.6rem }
-  .timer, .current-time{ min-width:90px; padding:8px 12px }
-  .card{ padding:12px; flex-direction:column; align-items:flex-start }
-}
 
 /* Bottom sheet - iOS glass */
 .bottom-sheet {
@@ -153,6 +148,8 @@ h1 {
 .sheet-content {
   padding: 8px 14px 18px 14px;
   overflow: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .sheet-header {
@@ -206,29 +203,33 @@ h1 {
 .sheet-content::-webkit-scrollbar { width: 8px; }
 .sheet-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.04); border-radius: 8px; }
 
-
-
-/* 780px */
-@media (max-width: 780px) {
-  .title { font-size: 28px; }
+/* responsive adjustments */
+@media (max-width:780px){
+  .container { padding: 16px; }
+  h1 { font-size: 28px; }
   .card { padding: 16px; }
   .card img { width: 44px; height: 44px; }
   .sheet { height: 75vh; }
+  .sheet-content { font-size: 14px; }
 }
 
-/* 770px */
-@media (max-width: 770px) {
-  .container { padding: 16px; }
+@media (max-width:770px){
   .cards { gap: 16px; }
   .card-title { font-size: 17px; }
 }
 
-/* 760px */
-@media (max-width: 760px) {
+@media (max-width:760px){
   .cards { grid-template-columns: 1fr 1fr; }
   .title { font-size: 26px; }
   .card { gap: 10px; }
   .card img { width: 42px; height: 42px; }
   .sheet { height: 80vh; }
   .sheet-content { font-size: 15px; }
+}
+
+@media (max-width:500px){
+  .cards { grid-template-columns: 1fr; }
+  .title { font-size: 24px; }
+  .card-title { font-size: 14px; }
+  .sheet-content { font-size: 13px; }
 }
