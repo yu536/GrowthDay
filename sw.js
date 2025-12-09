@@ -8,31 +8,53 @@ const FILES_TO_CACHE = [
   '/manifest.json'
 ];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
-  );
+// Install
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    for (const file of FILES_TO_CACHE) {
+      try {
+        await cache.add(file); // безопасно, ловим 404
+      } catch (err) {
+        console.warn('❌ Failed to cache:', file, err);
+      }
+    }
+  })());
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.map(k => k !== CACHE_NAME ? caches.delete(k) : Promise.resolve())
-    ))
-  );
-  self.clients.claim();
+// Activate
+self.addEventListener('activate', (event) => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null)));
+    self.clients.claim();
+  })());
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(resp => {
-      return resp || fetch(event.request).then(fetchResp => {
-        if (event.request.method === 'GET' && event.request.url.startsWith(self.location.origin)) {
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, fetchResp.clone()));
-        }
-        return fetchResp;
-      }).catch(() => caches.match('/index.html'));
-    })
-  );
+// Fetch handler
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+
+  if (req.method !== 'GET') return;
+
+  event.respondWith((async () => {
+    // Сначала пробуем из кэша
+    const cached = await caches.match(req);
+    if (cached) return cached;
+
+    try {
+      const networkResp = await fetch(req);
+      // Кэшируем один раз безопасно
+      if (req.url.startsWith(self.location.origin)) {
+        const cache = await caches.open(CACHE_NAME);
+        await cache.put(req, networkResp.clone());
+      }
+      return networkResp;
+    } catch (err) {
+      // Offline fallback
+      const fallback = await caches.match('/index.html');
+      return fallback;
+    }
+  })());
 });
