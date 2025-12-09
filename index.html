@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.json">
 
   <!-- Theme color for address bar -->
-  <meta name="theme-color" content="#00d8ff"/>
+  <meta name="theme-color" content="#0f172a"/>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -24,6 +24,18 @@
     </header>
 
     <main id="planContainer">Загрузка плана...</main>
+  </div>
+
+  <!-- Bottom sheet (iOS / glass style) -->
+  <div id="bottomSheet" class="bottom-sheet" aria-hidden="true">
+    <div class="sheet-handle" id="sheetHandle"></div>
+    <div class="sheet-content">
+      <div class="sheet-header">
+        <h2 id="sheetTitle"></h2>
+        <button id="sheetClose" aria-label="Закрыть">✖</button>
+      </div>
+      <div id="sheetDetails"></div>
+    </div>
   </div>
 
   <!-- App scripts -->
